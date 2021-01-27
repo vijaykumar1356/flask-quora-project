@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="content-section">
+  <form method="POST" action="" novalidate>
+    {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-3">{{ question.title }}</legend>
+        <div class="form-group">
+          <p>
+            {{ form.content.label(class="form-control-label") }} 
+            <small class="text-muted">
+              by {{ current_user.username }}
+            </small>
+          </p>
+          {% if form.content.errors %}
+            {{ form.content(class="form-control form-control-md is-invalid") }}
+            <div class="invalid-feedback">
+              {% for error in form.content.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.content(class="form-control form-control-md") }}
+          {% endif %}
+        </div>
+      </fieldset>
+      <div class="form-group">
+        <a class="btn btn-danger" href="{{ url_for('question', question_id=question.id) }}">Cancel</a>
+        {{ form.submit(class="btn btn-success") }}
+      </div>
+  </form>
+</div>
+{% endblock content %}

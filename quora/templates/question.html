@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% block content %}
+<article class="content-section">
+  <h3 class="mb-0 question-title ">{{ question.title }} </h3>
+  {%if answer_id %}
+    <div class="d-flex justify-content-end">
+      <small>
+        You answered this question! 
+        <a class="btn btn-secondary btn-sm" href="{{ url_for('update_answer', answer_id=answer_id) }}">Update</a>
+        <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+      </small>
+    </div>
+  {% else %}
+    <div class="d-flex justify-content-end">
+      <small>
+        <a class="btn btn-info btn-sm" href="{{ url_for('answer', question_id=question.id) }}">Answer it</a>
+      </small>
+    </div>
+  {% endif %}
+
+  {% for answer in question.answers %}
+    <div class="answer-section mb-3 mt-2">
+      <p class="mb-0"> {{ answer.answer_text }}</p>
+      <div class="d-flex justify-content-end">
+        <small class="text-muted ml-1">
+          Answered by {{ answer.answer_by.username }} on {{ answer.date_answered.strftime('%Y-%d-%m') }}
+        </small>
+      </div>
+    </div>
+  {% endfor %}
+</article>
+  <!-- Modal -->
+  {% if answer_id %}
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Delete Answer?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <form action="{{ url_for('delete_answer', answer_id=answer_id) }}" method="POST">
+              <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock content %}

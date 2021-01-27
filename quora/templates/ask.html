@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <div class="content-section">
+    <form method="POST" action="" novalidate>
+      {{ form.hidden_tag() }}
+      <fieldset class="form-group">
+        <legend class="border-bottom mb-4 text-info text-center">Ask Now</legend>
+        <div class="form-group">
+          <p>
+            {{ form.question.label(class="form-control-label") }} 
+            <small class="text-muted">
+              by 
+              {% if current_user.is_authenticated %}
+                {{ current_user.username }}
+              {% else %}
+                anonymous
+              {% endif %}
+            </small>
+          </p>
+          {% if form.question.errors %}
+            {{ form.question(class="form-control form-control-md is-invalid")}}
+            <div class="invalid-feedback">
+              {% for error in form.question.errors %}
+                <span>{{ error }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            {{ form.question(class="form-control form-control-md") }}
+          {% endif %}
+        </div>
+      </fieldset>
+      <div class="form-group">
+        <a class="btn btn-danger" href="{{ url_for('home') }}">Cancel</a>
+        {{ form.submit(class="btn btn-success") }}
+      </div>
+    </form>
+  </div>
+
+{% endblock content %}

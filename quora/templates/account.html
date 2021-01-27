@@ -1,0 +1,97 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h1 class="text-center text-info">User Profile
+    <a class="btn btn-secondary btn-sm" href="{{ url_for('update_account') }}">Update</a>
+  </h1>
+  <ul>
+      <li>USER NAME: {{ current_user.username }}</li>
+      <li>EMAIL: {{ current_user.email }}</li>
+  </ul>
+  <h5 class="text-center text-info">Questions Answered!</h4>
+  {% if answers == [] %}
+  <li class="question-title">No questions answered by User so far!</li>
+  {% else %}
+    {% for answer in answers %}
+      <article class="content-section">
+        <h3 class="mb-0">
+          <a class="question-title" href="{{ url_for('question', question_id=answer.question_info.id) }}">
+            {{ answer.question_info.title }}
+          </a>
+        </h3>
+        <div class="d-flex justify-content-end">
+          {% if answer.question_info.user_id == none %}
+          <small class="text-muted ml-1">by guest user</small>
+          {% else %}
+            <small class="text-muted ml-1">
+              by {{ answer.question_info.question_by.username }}
+            </small>
+          {% endif %}
+          <small class="text-muted ml-1"> on {{ answer.question_info.date_asked.strftime('%Y-%d-%m') }}</small>
+        </div>
+
+        <div class="answer-section mt-2">
+          <p class="mb-0"> {{ answer.answer_text }}</p>
+          <div class="d-flex justify-content-end">
+            <small class="text-muted ml-1">
+              Answered by {{ answer.answer_by.username }} on {{ answer.date_answered.strftime('%Y-%d-%m') }}
+            </small>
+          </div>
+        </div>
+        <div class="d-flex justify-content-end">
+          <small>
+            <a class="btn btn-secondary btn-sm" href="{{ url_for('update_answer', answer_id=answer.id) }}">
+              Update
+            </a>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">
+              Delete
+            </button>
+          </small>
+        </div>
+
+          <!-- Modal -->
+        {% if answer.id %}
+          <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel">Delete Answer?</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <form action="{{ url_for('delete_answer', answer_id=answer.id) }}" method="POST">
+                    <input class="btn btn-danger" type="submit" value="Delete">
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endif %}
+
+      </article>
+    {% endfor %}
+  {% endif %}
+
+{% endblock content %}
+
+{% block content2 %}
+  <div class="mt-5">
+    <h5 class="text-center text-info">Questions Asked!</h4>
+    {% if questions == [] %}
+      <li class="question-title">No questions by User so far!</li>
+    {% else %}
+      {% for question in questions %}
+        <li>
+          <a class="question-title" href="{{ url_for('question', question_id=question.id) }}">
+            {{ question.title }}
+            <small class="text-muted d-flex justify-content-end">
+              Asked on {{ question.date_asked.strftime('%Y-%d-%m') }}
+            </small>
+          </a>
+        </li>
+      {% endfor %}
+    {% endif %}
+  </div>
+{% endblock content2 %}

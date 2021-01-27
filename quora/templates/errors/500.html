@@ -1,0 +1,8 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="content-section">
+    <h1 class="text-danger">Internal Server Error! (500)</h1>
+    <p>The server is facing unexpected trouble. Please try again after sometime!</p>
+    <a class="btn btn-primary btn-sm" href="{{ url_for('home') }}">Back</a>
+</div>
+{% endblock content %}

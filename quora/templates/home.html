@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block content %}
+
+  {% for object in answers %}
+    <article class="content-section">
+      <h3 class="mb-0">
+        <a class="question-title" href="{{ url_for('question', question_id=object.id) }}">
+          {{ object.title }}
+        </a>
+      </h3>
+      <div class="d-flex justify-content-end">
+        {% if object.user_id == none %}
+          <small class="text-muted ml-1">by guest user</small>
+        {% else %}
+          <small class="text-muted ml-1">by {{ object.question_by.username }}</small>
+        {% endif %}
+        <small class="text-muted ml-1"> on {{ object.date_asked.strftime('%Y-%d-%m') }}</small>
+      </div>
+      {% for answer in answers[object] %}
+        <div class="answer-section mb-3 mt-2">
+          <p class="mb-0">    {{ answer.answer_text }}</p>
+          <div class="d-flex justify-content-end">
+            <small class="text-muted ml-1">
+              Answered by {{ answer.answer_by.username }} on {{ answer.date_answered.strftime('%Y-%d-%m') }}
+            </small>
+          </div>
+        </div>
+      {% endfor %}
+    </article>
+  {% endfor %}
+
+{% endblock content%}
+
+{% block content2 %}
+  <h4 class="text-center text-info">Unanswred Questions!</h4>
+  {% for question in un_answered %}
+    <li>
+      <a class="question-title" href="{{ url_for('answer', question_id=question.id) }}">
+        {{ question.title }}
+      </a>
+    </li>
+  {% endfor %}
+{% endblock content2 %}
